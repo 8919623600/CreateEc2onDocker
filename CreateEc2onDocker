@@ -1,0 +1,19 @@
+---
+- hosts: all
+  connection : local
+  gather_facts: False
+  tasks:
+    - name: Provision a set of instance
+      ec2:
+         key_name: ec2
+         instance_type: t2.micro
+         user_data: |
+               #!/bin/sh
+               sudo apt-get install apache2 -y | sudo apt update | sudo service apache2 enable | sudo service apache2 restart
+         image: ami-07ebfd5b3428b6f4d    #ubuntu 16.04 n.varginia
+         region: us-east-1
+         wait: yes
+         group: default   #security group name not id number
+         count: 1    #number of instance     #{19 more instace can launch, if ur using 1 ec2 instace already}
+         vpc_subnet_id: subnet-0c336f639323e508d
+         assign_public_ip: yes
